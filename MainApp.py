@@ -3,30 +3,32 @@ from tkinter import *
 from PIL import ImageTk, Image
 
 
+def resize_method(imagePath, imageSize):
+    currentImage = Image.open(imagePath)
+    resizedImage = currentImage.resize(imageSize)
+    return ImageTk.PhotoImage(resizedImage)
+
+
 class Main:
-    def resize_method(self, imagePath, imageSize):
-        currentImage = Image.open(imagePath)
-        resizedImage = currentImage.resize(imageSize)
-        return ImageTk.PhotoImage(resizedImage)
 
     def exitMethod(self):
         self.root.destroy()
 
     def mainMethod(self):
         image_size = (465, 200)
-        self.photoImage = self.resize_method("images/18.webp", image_size)
+        self.photoImage = resize_method("images/18.webp", image_size)
         Label(self.root, image=self.photoImage, text='').place(x=0, y=0)
 
         image_size = (465, 170)
-        self.photoImage4 = self.resize_method("images/12.webp", image_size)
+        self.photoImage4 = resize_method("images/12.webp", image_size)
         Label(self.root, image=self.photoImage4, text='').place(x=465, y=30)
 
         image_size = (500, 180)
-        self.photoImage2 = self.resize_method("images/6th.jpg", image_size)
+        self.photoImage2 = resize_method("images/6th.jpg", image_size)
         Label(self.root, image=self.photoImage2, text='').place(x=930, y=20)
 
         image_size = (1530, 710)
-        self.photoImage3 = self.resize_method("images/26 (2).jpg", image_size)
+        self.photoImage3 = resize_method("images/26 (2).jpg", image_size)
         Label(self.root, image=self.photoImage3, text='').place(x=0, y=200)
 
         titleLabel = Label(self.root, text="FACE RECOGNITION ATTENDANCE SYSTEM", fg="Red",
@@ -37,7 +39,7 @@ class Main:
         # Student Details Button
 
         image_size = (220, 220)
-        self.buttonPhotoImage1 = self.resize_method("images/9th.jpg", image_size)
+        self.buttonPhotoImage1 = resize_method("images/9th.jpg", image_size)
 
         self.studentDetailButton1 = Button(self.root, image=self.buttonPhotoImage1, cursor="hand2",
                                            activebackground="blue")
@@ -50,7 +52,7 @@ class Main:
         # Face Detector Button
 
         image_size = (220, 220)
-        self.buttonPhotoImage2 = self.resize_method("images/9th.jpg", image_size)
+        self.buttonPhotoImage2 = resize_method("images/9th.jpg", image_size)
 
         self.faceDetectorButton1 = Button(self.root, image=self.buttonPhotoImage2, cursor="hand2",
                                           activebackground="blue")
@@ -63,7 +65,7 @@ class Main:
         # Attendance Button
 
         image_size = (220, 220)
-        self.buttonPhotoImage3 = self.resize_method("images/9th.jpg", image_size)
+        self.buttonPhotoImage3 = resize_method("images/9th.jpg", image_size)
 
         self.attendanceDetailButton1 = Button(self.root, image=self.buttonPhotoImage3, cursor="hand2",
                                               activebackground="blue")
@@ -77,7 +79,7 @@ class Main:
         # Help Desk Button
 
         image_size = (220, 220)
-        self.buttonPhotoImage4 = self.resize_method("images/9th.jpg", image_size)
+        self.buttonPhotoImage4 = resize_method("images/9th.jpg", image_size)
 
         self.helpDeskButton1 = Button(self.root, image=self.buttonPhotoImage4, cursor="hand2", activebackground="blue")
         self.helpDeskButton1.place(x=1060, y=230, width=220, height=220)
@@ -89,7 +91,7 @@ class Main:
         # Train Data Button
 
         image_size = (220, 220)
-        self.buttonPhotoImage5 = self.resize_method("images/9th.jpg", image_size)
+        self.buttonPhotoImage5 = resize_method("images/9th.jpg", image_size)
 
         self.trainDataButton1 = Button(self.root, image=self.buttonPhotoImage5, cursor="hand2", activebackground="blue")
         self.trainDataButton1.place(x=100, y=500, width=220, height=220)
@@ -101,7 +103,7 @@ class Main:
         # Student Details Button
 
         image_size = (220, 220)
-        self.buttonPhotoImage6 = self.resize_method("images/9th.jpg", image_size)
+        self.buttonPhotoImage6 = resize_method("images/9th.jpg", image_size)
 
         self.photosButton1 = Button(self.root, image=self.buttonPhotoImage6, cursor="hand2", activebackground="blue")
         self.photosButton1.place(x=420, y=500, width=220, height=220)
@@ -113,7 +115,7 @@ class Main:
         # Developer Details Button
 
         image_size = (220, 220)
-        self.buttonPhotoImage7 = self.resize_method("images/9th.jpg", image_size)
+        self.buttonPhotoImage7 = resize_method("images/9th.jpg", image_size)
 
         self.developerDetailButton1 = Button(self.root, image=self.buttonPhotoImage7, cursor="hand2",
                                              activebackground="blue")
@@ -127,7 +129,7 @@ class Main:
         # Exit Button
 
         image_size = (220, 220)
-        self.buttonPhotoImage8 = self.resize_method("images/9th.jpg", image_size)
+        self.buttonPhotoImage8 = resize_method("images/9th.jpg", image_size)
 
         self.exitButton1 = Button(self.root, image=self.buttonPhotoImage8, cursor="hand2", activebackground="blue",
                                   command=lambda: self.exitMethod())
@@ -167,15 +169,16 @@ class Main:
         self.buttonPhotoImage8 = None
         self.exitButton1 = None
         self.exitButton = None
+        self.exitMethod = self.exitMethod
 
         self.root = Tk()
-        self.root.mainloop()
         self.root.wm_overrideredirect(True)
         self.root.geometry("1530x790+0+0")
         self.root.iconbitmap("images/favicon (2).ico")
-        self.exitMethod = self.exitMethod
 
         self.mainMethod()
+
+        self.root.mainloop()
 
 
 if __name__ == '__main__':
