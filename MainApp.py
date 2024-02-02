@@ -44,25 +44,25 @@ class Main:
         # images
 
         image_size = (465, 160)
-        self.photoImage = resize_method("images/MainAppImages/18.webp", image_size)
+        self.photoImage = resize_method("images/18.webp", image_size)
         Label(self.root, image=self.photoImage, text='').place(x=0, y=40)
 
         image_size = (465, 160)
-        self.photoImage4 = resize_method("images/MainAppImages/12.webp", image_size)
+        self.photoImage4 = resize_method("images/12.webp", image_size)
         Label(self.root, image=self.photoImage4, text='').place(x=465, y=40)
 
         image_size = (500, 160)
-        self.photoImage2 = resize_method("images/MainAppImages/19.webp", image_size)
+        self.photoImage2 = resize_method("images/6th.jpg", image_size)
         Label(self.root, image=self.photoImage2, text='').place(x=930, y=40)
 
         image_size = (1530, 710)
-        self.photoImage3 = resize_method("images/MainAppImages/26 (2).jpg", image_size)
+        self.photoImage3 = resize_method("images/26 (2).jpg", image_size)
         Label(self.root, image=self.photoImage3, text='').place(x=0, y=200)
 
         # Student Details Button
 
         image_size = (220, 220)
-        self.buttonPhotoImage1 = resize_method("images/MainAppImages/9th.jpg", image_size)
+        self.buttonPhotoImage1 = resize_method("images/9th.jpg", image_size)
 
         self.studentDetailButton1 = Button(self.root, image=self.buttonPhotoImage1, cursor="hand2",
                                            activebackground="blue")
@@ -75,7 +75,7 @@ class Main:
         # Face Detector Button
 
         image_size = (220, 220)
-        self.buttonPhotoImage2 = resize_method("images/MainAppImages/facedetector.webp", image_size)
+        self.buttonPhotoImage2 = resize_method("images/facedetector.webp", image_size)
 
         self.faceDetectorButton1 = Button(self.root, image=self.buttonPhotoImage2, cursor="hand2",
                                           activebackground="blue")
@@ -88,7 +88,7 @@ class Main:
         # Attendance Button
 
         image_size = (220, 220)
-        self.buttonPhotoImage3 = resize_method("images/MainAppImages/attendance.webp", image_size)
+        self.buttonPhotoImage3 = resize_method("images/attendance.webp", image_size)
 
         self.attendanceDetailButton1 = Button(self.root, image=self.buttonPhotoImage3, cursor="hand2",
                                               activebackground="blue")
@@ -102,7 +102,7 @@ class Main:
         # Help Desk Button
 
         image_size = (220, 220)
-        self.buttonPhotoImage4 = resize_method("images/MainAppImages/help.webp", image_size)
+        self.buttonPhotoImage4 = resize_method("images/help.webp", image_size)
 
         self.helpDeskButton1 = Button(self.root, image=self.buttonPhotoImage4, cursor="hand2", activebackground="blue")
         self.helpDeskButton1.place(x=1060, y=230, width=220, height=220)
@@ -114,7 +114,7 @@ class Main:
         # Train Data Button
 
         image_size = (220, 220)
-        self.buttonPhotoImage5 = resize_method("images/MainAppImages/trainData2.webp", image_size)
+        self.buttonPhotoImage5 = resize_method("images/trainData2.webp", image_size)
 
         self.trainDataButton1 = Button(self.root, image=self.buttonPhotoImage5, cursor="hand2", activebackground="blue")
         self.trainDataButton1.place(x=100, y=500, width=220, height=220)
@@ -126,7 +126,7 @@ class Main:
         # Photos Button
 
         image_size = (220, 220)
-        self.buttonPhotoImage6 = resize_method("images/MainAppImages/photos.webp", image_size)
+        self.buttonPhotoImage6 = resize_method("images/photos.webp", image_size)
 
         self.photosButton1 = Button(self.root, image=self.buttonPhotoImage6, cursor="hand2", activebackground="blue")
         self.photosButton1.place(x=420, y=500, width=220, height=220)
@@ -138,7 +138,7 @@ class Main:
         # Developer Details Button
 
         image_size = (220, 220)
-        self.buttonPhotoImage7 = resize_method("images/MainAppImages/developer.jpeg", image_size)
+        self.buttonPhotoImage7 = resize_method("images/developer.jpeg", image_size)
 
         self.developerDetailButton1 = Button(self.root, image=self.buttonPhotoImage7, cursor="hand2",
                                              activebackground="blue")
@@ -152,7 +152,7 @@ class Main:
         # Exit Button
 
         image_size = (220, 220)
-        self.buttonPhotoImage8 = resize_method("images/MainAppImages/exit-sign.webp", image_size)
+        self.buttonPhotoImage8 = resize_method("images/exit-sign.webp", image_size)
 
         self.exitButton1 = Button(self.root, image=self.buttonPhotoImage8, cursor="hand2", activebackground="blue",
                                   command=lambda: self.exitMethod())
@@ -200,7 +200,7 @@ class Main:
         self.root = Tk()
         self.root.wm_overrideredirect(True)
         self.root.geometry("1530x790+0+0")
-        self.root.iconbitmap("images/MainAppImages/favicon (2).ico")
+        self.root.iconbitmap("images/favicon (2).ico")
 
         self.mainMethod()
 
