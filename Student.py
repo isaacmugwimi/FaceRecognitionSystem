@@ -1,3 +1,4 @@
+import tkinter as tk
 import customtkinter
 from datetime import datetime
 from tkinter import *
@@ -96,25 +97,29 @@ class StudentWindow:
 
         Label(courseInformationFrame, text="Department:", font=font1, fg="Black", bg="white", ).place(x=5, y=3,
                                                                                                       width=100)
-        self.departmentDropdown = ttk.Combobox(courseInformationFrame, width=13, font=font2)
-        self.departmentDropdown.set("Select Option")
+        self.departmentDropdown = ttk.Combobox(courseInformationFrame, width=13, font=font2, state="readonly")
+        self.departmentDropdown.set("Select Department Option")
+        self.departmentDropdown["values"]=("Computer", "IT", "Civil", "Mechanical","Business", "Education")
         self.departmentDropdown.place(x=110, y=7, width=200, height=23)
 
         Label(courseInformationFrame, text="Year:", font=font1, fg="Black", bg="white").place(x=5, y=38, width=100)
         self.yearDropdown = ttk.Combobox(courseInformationFrame, width=13, font=font2)
-        self.yearDropdown.set("Select Option")
+        self.yearDropdown.set("Select Year")
+        self.yearDropdown["values"] = ("year 1", "year 2", "year 3", "year 4")
         self.yearDropdown.place(x=110, y=41, width=200, height=23)
 
         Label(courseInformationFrame, text="Course:", font=font1, fg="Black", bg="white", ).place(x=340, y=3, width=100)
-        self.departmentDropdown = ttk.Combobox(courseInformationFrame, width=13, font=font2)
-        self.departmentDropdown.set("Select Option")
-        self.departmentDropdown.place(x=440, y=7, width=200, height=23)
+        self.courseDropdown = ttk.Combobox(courseInformationFrame, width=13, font=font2)
+        self.courseDropdown.set("Select Course")
+        self.courseDropdown["values"]=("Computer Science", "Software Engineering", "BIT", "BBIT","Computer Science & Maths", "Finamcial Engineering")        
+        self.courseDropdown.place(x=440, y=7, width=200, height=23)
 
         Label(courseInformationFrame, text="Semester:", font=font1, fg="Black", bg="white", ).place(x=340, y=38,
                                                                                                     width=100)
-        self.departmentDropdown = ttk.Combobox(courseInformationFrame, width=13, font=font2)
-        self.departmentDropdown.set("Select Option")
-        self.departmentDropdown.place(x=440, y=41, width=200, height=23)
+        self.semesterDropdown = ttk.Combobox(courseInformationFrame, width=13, font=font2)
+        self.semesterDropdown.set("Select Semester")
+        self.semesterDropdown["values"] = ("Semester 1", "Semester 2", "semester 3")
+        self.semesterDropdown.place(x=440, y=41, width=200, height=23)
 
         courseInformationFrame.place(x=3, y=120, height=100, width=690)
         # ******************  End of it *********************
@@ -149,6 +154,8 @@ class StudentWindow:
         genderComboboxLabel.grid(row=2, column=0, padx=5, pady=5, sticky=W)
 
         self.genderCombobox = ttk.Combobox(detailsFrame, width=22, font=font2)
+        self.genderCombobox.set("Select Gender")
+        self.genderCombobox["values"]=("Male", "Fenale", "Other")
         self.genderCombobox.grid(row=2, column=1, pady=5)
 
         # Email
@@ -309,15 +316,65 @@ class StudentWindow:
         # *******end of it******
 
         #Table
-        tableFrame = Frame(studentDetailsFrame,  relief=GROOVE, bg="blue", borderwidth=2,)
+        tableFrame = Frame(studentDetailsFrame,  relief=GROOVE, bg="white", borderwidth=2,)
                            
         xScrollBar = ttk.Scrollbar(tableFrame, orient=HORIZONTAL)
-        yScrollBar = ttk.Scrollbar(tableFrame, orient="VERTICAL")
+        yScrollBar = ttk.Scrollbar(tableFrame, orient=VERTICAL)
 
-        self.table = ttk.TreeView(tableFrame, height=7)
-        self.table.place(x=10, y=5)
-                                      
-        tableFrame.place(x=5, y=260, height=200, width=600)
+        style = ttk.Style(self.window)
+        style.theme_use("clam")
+        style.configure("Treeview.Heading", background='Light green', relief='Flat', font=font2)
+        style.configure("Treeview", background='#000', foreground='#FFF', font=font1, fieldbackground='#313837') 
+
+        items = ("department", "courses", "year", "semester", "studentID", "studentName", "classDiv", 
+                               "rollNo", "gender", "d.o.b", "email", "phoneNo", "address", "photo")
+        
+        self.table = ttk.Treeview(tableFrame, height=10, xscrollcommand=xScrollBar.set, yscrollcommand=yScrollBar.set,
+                                  column=items)
+        
+        xScrollBar.pack(fill=X, side=BOTTOM)
+        yScrollBar.pack(fill=Y, side=RIGHT)
+        xScrollBar.config(command=self.table.xview)
+        yScrollBar.config(command=self.table.yview)
+        # self.table["column"] = ("department", "courses", "year", "semester", "studentID", "studentName", "classDiv", 
+        #                         "rollNo", "gender", "d.o.b", "email", "phoneNo", "address", "photo")
+        
+        for i in items:
+            self.table.column(i, width=100)
+
+        # self.table.column("#0", width=0, stretch=tk.NO)
+        # self.table.column("Department", anchor=tk.CENTER, width=80)
+        # self.table.column("Course", anchor=tk.CENTER, width=60)
+        # self.table.column("Year", anchor=tk.CENTER, width=60)
+        # self.table.column("Semester", anchor=tk.CENTER, width=60)
+        # self.table.column("Student ID", anchor=tk.CENTER, width=80)
+        # self.table.column("Student Name", anchor=tk.CENTER, width=90)
+        # self.table.column("Class Div", anchor=tk.CENTER, width=70)
+        # self.table.column("Roll No", anchor=tk.CENTER, width=80)
+
+        self.table.heading("department", text="Department")
+        self.table.heading("courses", text="Courses")
+        self.table.heading("year", text="Year")
+        self.table.heading("semester", text="Semester")
+        self.table.heading("studentID", text="Student ID")
+        self.table.heading("studentName", text="Student Name")
+        self.table.heading("classDiv", text="Class Div")
+        self.table.heading("rollNo", text="Roll No")
+        self.table.heading("gender", text="Gender")
+        self.table.heading("d.o.b", text="D.O.B")
+        self.table.heading("email", text="Email")
+        self.table.heading("phoneNo", text="Phone NO")
+        self.table.heading("address", text="address")
+        self.table.heading("photo", text="Photo")
+        self.table["show"]="headings"
+        
+        
+    
+
+
+        self.table.pack(fill=BOTH, expand=1) 
+        tableFrame.place(x=5, y=260, height=250, width=600)
+        
 
         
 
