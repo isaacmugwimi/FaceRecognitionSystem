@@ -1,7 +1,7 @@
+import customtkinter
 from datetime import datetime
 from tkinter import *
-from tkinter import messagebox
-import time
+from tkinter import ttk
 
 from PIL import ImageTk, Image
 
@@ -10,6 +10,11 @@ def resize_method(imagePath, imageSize):
     currentImage = Image.open(imagePath)
     resizedImage = currentImage.resize(imageSize)
     return ImageTk.PhotoImage(resizedImage)
+
+
+font1 = ('consolas', 11,)
+font2 = ('consolas', 9)
+font3 = ('arial', 12)
 
 
 class StudentWindow:
@@ -48,18 +53,18 @@ class StudentWindow:
 
         # Main Frame
         studentMainFrame = Frame(self.window, bg="white", bd=2)
-        studentMainFrame.place(x=10, y=172, width=1480, height=600)
+
+        # details are as folllows ...
 
         # Label Frame
-        studentDetailsFrame = LabelFrame(studentMainFrame, text="Student Details", fg="red", relief=GROOVE,
-                                         font=("Arial", 15), bg="white", borderwidth=2,
-                                         )
-        studentDetailsFrame.place(x=10, y=10, height=540, width=700)
+        studentInfoFrame = LabelFrame(studentMainFrame, text="Student Information", fg="red", relief=GROOVE,
+                                      font=("Arial", 13), bg="white", borderwidth=2,
+                                      )
 
-        # Adding images tos the StudentDetailsFrame
+        # Adding images tos the studentInfoFrame
 
-        self.studentPicsFrame = Frame(studentDetailsFrame, bg="Blue", )
-        self.studentPicsFrame.place(x=2, y=0, width=690, height=115)
+        self.studentPicsFrame = Frame(studentInfoFrame, bg="#FFF", )
+        self.studentPicsFrame.place(x=8, y=0, width=685, height=115)
 
         # ****************** Start of it ****************************
         def studentPicsMethod():
@@ -71,12 +76,10 @@ class StudentWindow:
             self.studentImage2 = resize_method("images/5th.jpg", newSize)
             Label(self.studentPicsFrame, image=self.studentImage2, text='').place(x=171, y=1, width=170, height=120)
 
-
             newSize = (170, 120)
             self.studentImage3 = resize_method("images/8th.jpg", newSize)
             Label(self.studentPicsFrame, image=self.studentImage3, text='').place(x=341, y=1, width=170, height=120)
 
-            
             newSize = (170, 120)
             self.studentImage4 = resize_method("images/4th.jpg", newSize)
             Label(self.studentPicsFrame, image=self.studentImage4, text='').place(x=511, y=1, width=170, height=120)
@@ -85,15 +88,249 @@ class StudentWindow:
 
         # ********************* End of It *******************************
 
-        
-
-        courseInformationFrame = LabelFrame(studentDetailsFrame, text="Current Course Information", fg="Green",
+        # Start for the Current Course Info...
+        courseInformationFrame = LabelFrame(studentInfoFrame, text="Current Course Information", fg="Green",
                                             relief=RIDGE,
                                             font=("Arial", 11), bg="white", borderwidth=2
                                             )
-        courseInformationFrame.place(x=3, y=120, height=150, width=690)
+
+        Label(courseInformationFrame, text="Department:", font=font1, fg="Black", bg="white", ).place(x=5, y=3,
+                                                                                                      width=100)
+        self.departmentDropdown = ttk.Combobox(courseInformationFrame, width=13, font=font2)
+        self.departmentDropdown.set("Select Option")
+        self.departmentDropdown.place(x=110, y=7, width=200, height=23)
+
+        Label(courseInformationFrame, text="Year:", font=font1, fg="Black", bg="white").place(x=5, y=38, width=100)
+        self.yearDropdown = ttk.Combobox(courseInformationFrame, width=13, font=font2)
+        self.yearDropdown.set("Select Option")
+        self.yearDropdown.place(x=110, y=41, width=200, height=23)
+
+        Label(courseInformationFrame, text="Course:", font=font1, fg="Black", bg="white", ).place(x=340, y=3, width=100)
+        self.departmentDropdown = ttk.Combobox(courseInformationFrame, width=13, font=font2)
+        self.departmentDropdown.set("Select Option")
+        self.departmentDropdown.place(x=440, y=7, width=200, height=23)
+
+        Label(courseInformationFrame, text="Semester:", font=font1, fg="Black", bg="white", ).place(x=340, y=38,
+                                                                                                    width=100)
+        self.departmentDropdown = ttk.Combobox(courseInformationFrame, width=13, font=font2)
+        self.departmentDropdown.set("Select Option")
+        self.departmentDropdown.place(x=440, y=41, width=200, height=23)
+
+        courseInformationFrame.place(x=3, y=120, height=100, width=690)
+        # ******************  End of it *********************
+
+        # Start for the Current Course Info...
+
+        studentClassInformationFrame = LabelFrame(studentInfoFrame, text="Student Class Information", fg="Green",
+                                                  relief=RIDGE,
+                                                  font=("Arial", 11), bg="white", borderwidth=2
+                                                  )
+
+        detailsFrame = Frame(studentClassInformationFrame, bg="white")
+
+        # studentIdNo
+
+        studentIdNoLabel = Label(detailsFrame, text="Reg NO:", font=font1, fg="Black", bg="white")
+        studentIdNoLabel.grid(row=0, column=0, padx=5, pady=5, sticky=W)
+
+        self.studentIdNoEntry = customtkinter.CTkEntry(detailsFrame, width=180, font=font3, corner_radius=15,
+                                                       bg_color="white", text_color="#000000", height=25)
+        self.studentIdNoEntry.grid(row=0, column=1, padx=5, pady=5)
+
+        # class Division
+        classDivisionComboboxLabel = Label(detailsFrame, text="Class Division:", font=font1, fg="Black", bg="white")
+        classDivisionComboboxLabel.grid(row=1, column=0, padx=5, pady=5, sticky=W)
+
+        self.classDivisionCombobox = ttk.Combobox(detailsFrame, width=22, font=font2)
+        self.classDivisionCombobox.grid(row=1, column=1, pady=5)
+
+        # Gender
+        genderComboboxLabel = Label(detailsFrame, text="Gender:", font=font1, fg="Black", bg="white")
+        genderComboboxLabel.grid(row=2, column=0, padx=5, pady=5, sticky=W)
+
+        self.genderCombobox = ttk.Combobox(detailsFrame, width=22, font=font2)
+        self.genderCombobox.grid(row=2, column=1, pady=5)
+
+        # Email
+        emailLabel = Label(detailsFrame, text="Email:", font=font1, fg="Black", bg="white")
+        emailLabel.grid(row=3, column=0, padx=5, pady=5, sticky=W)
+
+        self.emailEntry = customtkinter.CTkEntry(detailsFrame, width=180, font=font3, corner_radius=15,
+                                                 bg_color="white", text_color="#000000", height=25)
+        self.emailEntry.grid(row=3, column=1, padx=5, pady=5)
+
+        # Address
+        addressLabel = Label(detailsFrame, text="Address:", font=font1, fg="Black", bg="white")
+        addressLabel.grid(row=4, column=0, padx=5, pady=5, sticky=W)
+
+        self.addressEntry = customtkinter.CTkEntry(detailsFrame, width=180, font=font3, corner_radius=15,
+                                                   bg_color="white", text_color="#000000", height=25)
+        self.addressEntry.grid(row=4, column=1, padx=5, pady=5)
+
+        # Student Name
+        studentNameLabel = Label(detailsFrame, text="Student Name:", font=font1, fg="Black", bg="white")
+        studentNameLabel.grid(row=0, column=2, padx=15, pady=5, sticky=W)
+
+        self.studentNameEntry = customtkinter.CTkEntry(detailsFrame, width=180, font=font3, corner_radius=15,
+                                                       bg_color="white", text_color="#000000", height=25)
+        self.studentNameEntry.grid(row=0, column=3, padx=0, pady=5)
+
+        # Roll No.
+        studentRollNoLabel = Label(detailsFrame, text="Roll No.", font=font1, fg="Black", bg="white")
+        studentRollNoLabel.grid(row=1, column=2, padx=15, pady=5, sticky=W)
+
+        self.studentRollNoEntry = customtkinter.CTkEntry(detailsFrame, width=180, font=font3, corner_radius=15,
+                                                         bg_color="white", text_color="#000000", height=25)
+        self.studentRollNoEntry.grid(row=1, column=3, padx=0, pady=5)
+
+        # D.O.B
+        studentDobLabel = Label(detailsFrame, text="D.O.B:", font=font1, fg="Black", bg="white")
+        studentDobLabel.grid(row=2, column=2, padx=15, pady=5, sticky=W)
+
+        self.studentDobEntry = customtkinter.CTkEntry(detailsFrame, width=180, font=font3, corner_radius=15,
+                                                      bg_color="white", text_color="#000000", height=25)
+        self.studentDobEntry.grid(row=2, column=3, padx=0, pady=5)
+
+        # Phone No.
+        studentPhoneLabel = Label(detailsFrame, text="Phone No.", font=font1, fg="Black", bg="white")
+        studentPhoneLabel.grid(row=3, column=2, padx=15, pady=5, sticky=W)
+
+        self.studentPhoneEntry = customtkinter.CTkEntry(detailsFrame, width=180, font=font3, corner_radius=15,
+                                                        bg_color="white", text_color="#000000", height=25)
+        self.studentPhoneEntry.grid(row=3, column=3, padx=0, pady=5)
+
+        # Radio Buttons
+        photoSampleRadioButton = ttk.Radiobutton(detailsFrame, text="Take Photo Sample", value=YES)
+        photoSampleRadioButton.grid(row=5, column=0, padx=5, pady=5)
+
+        noPhotoSampleRadioButton = ttk.Radiobutton(detailsFrame, text="No Photo Sample", value=YES)
+        noPhotoSampleRadioButton.grid(row=5, column=1, padx=5, pady=5)
+
+        # ********************* submit buttons ***************************
+        self.buttonsFrame = Frame(detailsFrame, bg="white", height=60, width=680, background="white")
+
+        # save button
+        self.saveButton = customtkinter.CTkButton(self.buttonsFrame, text='SAVE',
+                                                  text_color='#FFFFFF',
+                                                  fg_color='#36719F', height=25, corner_radius=25, width=150,
+                                                  cursor='hand2', hover_color='#FF4505', font=('arial', 14))
+        self.saveButton.grid(row=0, column=0, padx=5, ipadx=5)
+
+        # update button
+        self.updateButton = customtkinter.CTkButton(self.buttonsFrame, text='UPDATE',
+                                                    text_color='#FFFFFF',
+                                                    fg_color='#36719F', height=25, corner_radius=25, width=150,
+                                                    cursor='hand2', hover_color='#FF4505', font=('arial', 14))
+        self.updateButton.grid(row=0, column=1, padx=5, ipadx=5)
+
+        # deleteButton
+        self.deleteButton = customtkinter.CTkButton(self.buttonsFrame, text='DELETE',
+                                                    text_color='#FFFFFF',
+                                                    fg_color='#36719F', height=25, corner_radius=25, width=150,
+                                                    cursor='hand2', hover_color='#FF4505', font=('arial', 14))
+        self.deleteButton.grid(row=0, column=2, padx=5, ipadx=5)
+
+        # resetButton
+        self.resetButton = customtkinter.CTkButton(self.buttonsFrame, text='RESET',
+                                                   text_color='#FFFFFF',
+                                                   fg_color='#36719F', height=25, corner_radius=25, width=150,
+                                                   cursor='hand2', hover_color='#FF4505', font=('arial', 14))
+        self.resetButton.grid(row=0, column=3, padx=5, ipadx=5)
+
+        # add photo sample button
+        self.addSampleButton = customtkinter.CTkButton(self.buttonsFrame, text='ADD PHOTO SAMPLE',
+                                                       text_color='#FFFFFF',
+                                                       fg_color='#36719F', height=25, corner_radius=25, width=320,
+                                                       cursor='hand2', hover_color='#FF4505', font=('arial', 14))
+        self.addSampleButton.grid(row=1, column=0, padx=5, ipadx=5, columnspan=2, pady=3)
+
+        # Upload photo sample
+        self.uploadSampleButton = customtkinter.CTkButton(self.buttonsFrame, text='UPLOAD PHOTO SAMPLE',
+                                                          text_color='#FFFFFF',
+                                                          fg_color='#36719F', height=25, corner_radius=25, width=320,
+                                                          cursor='hand2', hover_color='#FF4505', font=('arial', 14))
+        self.uploadSampleButton.grid(row=1, column=2, padx=5, pady=3, ipadx=5, columnspan=2)
+
+        # ******* End ************
+
+        self.buttonsFrame.place(x=5, y=210)
+        detailsFrame.place(x=2, y=3, height=270, width=680)
+
+        studentClassInformationFrame.place(x=3, y=230, height=295, width=690)
+        # ***********  End of it *********************
+
+        studentInfoFrame.place(x=10, y=3, height=555, width=700)
+        # ********* End **********
+
+        # ******* studentdetails Frame ************
+        studentDetailsFrame = LabelFrame(studentMainFrame, text="Student Details", fg="red", relief=GROOVE,
+                                      font=("Arial", 13), bg="white", borderwidth=2,
+                                      )
+        newSize = (605, 180)
+        self.studentImage6 = resize_method("images/9th.jpg", newSize)
+        Label(studentDetailsFrame, text="", bg="blue", image=self.studentImage6).place(x=3, y=2, width=605, height=180)
+
+        # Frame to search student details and input in a table
+        searchStudentDetailsFrame= LabelFrame(studentDetailsFrame, text="Search Student Details", fg="green", relief=GROOVE,
+                                      font=("Arial", 13), bg="white", borderwidth=2,
+                                      )
+        
+        # Search Label
+        Label(searchStudentDetailsFrame, text="Search By:", fg="white", bg="Red", font=("Arial", 12, "bold"),).grid(row=0, column=0, padx=5)
+        
+        # Search Combo box
+        courseComboBox = ttk.Combobox(searchStudentDetailsFrame, width=15, font= font2, state="readonly" )
+        courseComboBox.set("Select Option")
+        courseComboBox["values"] = ("Roll No", "Mobile No", "name" )
+        courseComboBox.grid(row=0, column=1, padx=2)
+
+        # Search Entry
+        self.searchEntry = customtkinter.CTkEntry(searchStudentDetailsFrame, width=150, font=font3, corner_radius=15,
+                                                       bg_color="white", text_color="#000000", height=25)
+        self.searchEntry.grid(row=0, column=2, padx=5, pady=5)
+
+        # Search Button
+        self.searchButton = customtkinter.CTkButton(searchStudentDetailsFrame, text='SEARCH',
+                                                    text_color='#FFFFFF',
+                                                    fg_color='#36719F', height=25, corner_radius=25, width=50,
+                                                    cursor='hand2', hover_color='#FF4505', font=('arial', 12))
+        self.searchButton.grid(row=0, column=3, padx=5, ipadx=5)
+
+        # Show All Button
+        self.showAllButton = customtkinter.CTkButton(searchStudentDetailsFrame, text='SHOW ALL',
+                                                    text_color='#FFFFFF',
+                                                    fg_color='#36719F', height=25, corner_radius=25, width=50,
+                                                    cursor='hand2', hover_color='#FF4505', font=('arial', 12))
+        self.showAllButton.grid(row=0, column=4, padx=5, ipadx=5)
+
+
+
+        searchStudentDetailsFrame.place(x=5, y=190, height=60, width=600)
+        # *******end of it******
+
+        #Table
+        tableFrame = Frame(studentDetailsFrame,  relief=GROOVE, bg="blue", borderwidth=2,)
+                           
+        xScrollBar = ttk.Scrollbar(tableFrame, orient=HORIZONTAL)
+        yScrollBar = ttk.Scrollbar(tableFrame, orient="VERTICAL")
+
+        self.table = ttk.TreeView(tableFrame, height=7)
+        self.table.place(x=10, y=5)
+                                      
+        tableFrame.place(x=5, y=260, height=200, width=600)
+
+        
+
+        studentDetailsFrame.place(x=720, y=3, height=555, width=620)
+        # ********* End **********
+        
+        studentMainFrame.place(x=10, y=172, width=1480, height=600)
+        # ******************  End of the MainFrame *********************
+
 
     def __init__(self):
+        self.yearDropdown = None
+        self.departmentDropdown = None
         self.studentPicsFrame = None
         self.timeLabel = None
         self.photoImage3 = None

@@ -1,7 +1,8 @@
+import tkinter
+import customtkinter
 from datetime import datetime
 from tkinter import *
-from tkinter import messagebox
-import time
+from tkinter import ttk
 
 from PIL import ImageTk, Image
 
@@ -12,200 +13,177 @@ def resize_method(imagePath, imageSize):
     return ImageTk.PhotoImage(resizedImage)
 
 
-class Main:
+font1 = ('consolas', 12, 'bold')
+font2 = ('consolas', 9)
+font3 = ('arial', 12)
 
-    def exitMethod(self):
-        response = messagebox.askyesno("Confirm", "Are you sure you want to Exit?", parent=self.root)
-        if response:
-            self.root.destroy()
 
+class StudentWindow:
     def current_time(self):
-        currentDateTime = datetime.now()
-        currentDate = currentDateTime.strftime("%Y-%m-%d")
-        currentTime = currentDateTime.strftime("%H:%M:%S %p")
-        self.timeLabel.config(text=f"Time: {currentTime}")
+        obj_date = datetime.now()
+        current_time = obj_date.strftime("%H:%M:%S %p")
+        self.timeLabel.config(text=f"Time: {current_time}")
         self.timeLabel.after(1000, self.current_time)
 
-    def mainMethod(self):
-        # headerFrame = Frame(self.root bd=0)
-        # headerFrame.place(x=0, y=0, width=1530, height=40)
+    def studentMethod(self):
+        titleLabel = Label(self.window, text="STUDENT MANAGEMENT SYSTEM", fg="Green",
+                           font=("Consolas", 20, "bold underline"), bg="white")
+        titleLabel.place(x=0, y=130, width=1530, height=30)
 
-        # title and time
-        titleLabel = Label(self.root, text="FACE RECOGNITION ATTENDANCE SYSTEM", fg="Red",
-                           font=("Consolas", 25, "bold underline"), bg="cyan")
-        titleLabel.place(x=0, y=0, width=1530, height=40)
-
-        self.timeLabel = Label(self.root, font=('times new roman', 16, 'bold'), background='Cyan',
-                               foreground='blue')
-        self.timeLabel.place(x=20, y=5, width=190, height=25)
-        self.timeLabel = self.timeLabel
+        timeLabel = Label(self.window, fg="Green", bg="white", font=("Consolas", 18,))
+        timeLabel.place(x=10, y=135, width=250, height=27)
+        self.timeLabel = timeLabel
         self.current_time()
 
-        # images
+        # Images
+        image_size = (465, 130)
+        self.photoImage = resize_method("images/23.jpg", image_size)
+        Label(self.window, image=self.photoImage, text='').place(x=0, y=0)
 
-        image_size = (465, 160)
-        self.photoImage = resize_method("images/18.webp", image_size)
-        Label(self.root, image=self.photoImage, text='').place(x=0, y=40)
+        image_size = (465, 130)
+        self.photoImage4 = resize_method("images/11th.jpg", image_size)
+        Label(self.window, image=self.photoImage4, text='').place(x=465, y=0)
 
-        image_size = (465, 160)
-        self.photoImage4 = resize_method("images/12.webp", image_size)
-        Label(self.root, image=self.photoImage4, text='').place(x=465, y=40)
-
-        image_size = (500, 160)
-        self.photoImage2 = resize_method("images/6th.jpg", image_size)
-        Label(self.root, image=self.photoImage2, text='').place(x=930, y=40)
+        image_size = (500, 130)
+        self.photoImage2 = resize_method("images/clg.jpg", image_size)
+        Label(self.window, image=self.photoImage2, text='').place(x=930, y=0)
 
         image_size = (1530, 710)
-        self.photoImage3 = resize_method("images/26 (2).jpg", image_size)
-        Label(self.root, image=self.photoImage3, text='').place(x=0, y=200)
+        self.photoImage3 = resize_method("images/1st.jpg", image_size)
+        Label(self.window, image=self.photoImage3, text='').place(x=0, y=160)
 
-        # Student Details Button
+        # Main Frame
+        studentMainFrame = Frame(self.window, bg="white", bd=2)
 
-        image_size = (220, 220)
-        self.buttonPhotoImage1 = resize_method("images/9th.jpg", image_size)
+        # details are as folllows ...
 
-        self.studentDetailButton1 = Button(self.root, image=self.buttonPhotoImage1, cursor="hand2",
-                                           activebackground="blue")
-        self.studentDetailButton1.place(x=100, y=230, width=220, height=220)
+        # Label Frame
+        studentDetailsFrame = LabelFrame(studentMainFrame, text="Student Details", fg="red", relief=GROOVE,
+                                         font=("Arial", 15), bg="white", borderwidth=2,
+                                         )
 
-        self.studentDetailButton = Button(self.root, text='Student Details', cursor="hand2", font=("Consolas", 13),
-                                          fg="white", bg="darkblue", activebackground="blue", activeforeground="orange")
-        self.studentDetailButton.place(x=99, y=410, width=221, height=40)
+        # Adding images tos the StudentDetailsFrame
 
-        # Face Detector Button
+        self.studentPicsFrame = Frame(studentDetailsFrame, bg="#FFF", )
+        self.studentPicsFrame.place(x=8, y=0, width=685, height=115)
 
-        image_size = (220, 220)
-        self.buttonPhotoImage2 = resize_method("images/facedetector.webp", image_size)
+        # ****************** Start of it ****************************
+        def studentPicsMethod():
+            newSize = (170, 120)
+            self.studentImage1 = resize_method("images/1st.jpg", newSize)
+            Label(self.studentPicsFrame, image=self.studentImage1, text='').place(x=1, y=1, width=170, height=120)
 
-        self.faceDetectorButton1 = Button(self.root, image=self.buttonPhotoImage2, cursor="hand2",
-                                          activebackground="blue")
-        self.faceDetectorButton1.place(x=420, y=230, width=220, height=220)
+            newSize = (170, 120)
+            self.studentImage2 = resize_method("images/5th.jpg", newSize)
+            Label(self.studentPicsFrame, image=self.studentImage2, text='').place(x=171, y=1, width=170, height=120)
 
-        self.faceDetectorButton = Button(self.root, text='Face Detector', cursor="hand2", font=("Consolas", 13),
-                                         fg="white", bg="darkblue", activebackground="blue", activeforeground="orange")
-        self.faceDetectorButton.place(x=419, y=410, width=221, height=40)
+            newSize = (170, 120)
+            self.studentImage3 = resize_method("images/8th.jpg", newSize)
+            Label(self.studentPicsFrame, image=self.studentImage3, text='').place(x=341, y=1, width=170, height=120)
 
-        # Attendance Button
+            newSize = (170, 120)
+            self.studentImage4 = resize_method("images/4th.jpg", newSize)
+            Label(self.studentPicsFrame, image=self.studentImage4, text='').place(x=511, y=1, width=170, height=120)
 
-        image_size = (220, 220)
-        self.buttonPhotoImage3 = resize_method("images/attendance.webp", image_size)
+        studentPicsMethod()  # method which hold the studentImages
 
-        self.attendanceDetailButton1 = Button(self.root, image=self.buttonPhotoImage3, cursor="hand2",
-                                              activebackground="blue")
-        self.attendanceDetailButton1.place(x=740, y=230, width=220, height=220)
+        # ********************* End of It *******************************
 
-        self.attendanceDetailButton = Button(self.root, text='Attendance', cursor="hand2", font=("Consolas", 13),
-                                             fg="white", bg="darkblue", activebackground="blue",
-                                             activeforeground="orange")
-        self.attendanceDetailButton.place(x=739, y=410, width=221, height=40)
+        # Start for the Current Course Info...
+        courseInformationFrame = LabelFrame(studentDetailsFrame, text="Current Course Information", fg="Green",
+                                            relief=RIDGE,
+                                            font=("Arial", 11), bg="white", borderwidth=2
+                                            )
 
-        # Help Desk Button
+        Label(courseInformationFrame, text="Department:", font=font1, fg="Black", bg="white", ).place(x=5, y=3,
+                                                                                                      width=100)
+        self.departmentDropdown = ttk.Combobox(courseInformationFrame, width=13, font=font2)
+        self.departmentDropdown.set("Select Option")
+        self.departmentDropdown.place(x=110, y=7, width=200, height=23)
 
-        image_size = (220, 220)
-        self.buttonPhotoImage4 = resize_method("images/help.webp", image_size)
+        Label(courseInformationFrame, text="Year:", font=font1, fg="Black", bg="white").place(x=5, y=38, width=100)
+        self.yearDropdown = ttk.Combobox(courseInformationFrame, width=13, font=font2)
+        self.yearDropdown.set("Select Option")
+        self.yearDropdown.place(x=110, y=41, width=200, height=23)
 
-        self.helpDeskButton1 = Button(self.root, image=self.buttonPhotoImage4, cursor="hand2", activebackground="blue")
-        self.helpDeskButton1.place(x=1060, y=230, width=220, height=220)
+        Label(courseInformationFrame, text="Course:", font=font1, fg="Black", bg="white", ).place(x=340, y=3, width=100)
+        self.departmentDropdown = ttk.Combobox(courseInformationFrame, width=13, font=font2)
+        self.departmentDropdown.set("Select Option")
+        self.departmentDropdown.place(x=440, y=7, width=200, height=23)
 
-        self.helpDeskButton = Button(self.root, text='Help Desk', cursor="hand2", font=("Consolas", 13), fg="white",
-                                     bg="darkblue", activebackground="blue", activeforeground="orange")
-        self.helpDeskButton.place(x=1059, y=410, width=221, height=40)
+        Label(courseInformationFrame, text="Semester:", font=font1, fg="Black", bg="white", ).place(x=340, y=38,
+                                                                                                    width=100)
+        self.departmentDropdown = ttk.Combobox(courseInformationFrame, width=13, font=font2)
+        self.departmentDropdown.set("Select Option")
+        self.departmentDropdown.place(x=440, y=41, width=200, height=23)
 
-        # Train Data Button
+        courseInformationFrame.place(x=3, y=120, height=100, width=690)
+        # ******************  End of it *********************
 
-        image_size = (220, 220)
-        self.buttonPhotoImage5 = resize_method("images/trainData2.webp", image_size)
+        # Start for the Current Course Info...
 
-        self.trainDataButton1 = Button(self.root, image=self.buttonPhotoImage5, cursor="hand2", activebackground="blue")
-        self.trainDataButton1.place(x=100, y=500, width=220, height=220)
+        studentClassInformationFrame = LabelFrame(studentDetailsFrame, text="Student Class Information", fg="Green",
+                                                  relief=RIDGE,
+                                                  font=("Arial", 11), bg="white", borderwidth=2
+                                                  )
+        scrollbar = Scrollbar(studentClassInformationFrame, orient=VERTICAL)
+        canvas = Canvas(studentClassInformationFrame, yscrollcommand=scrollbar.set, bg="white", width=660)
 
-        self.trainDataButton = Button(self.root, text='Train Data', cursor="hand2", font=("Consolas", 13), fg="white",
-                                      bg="darkblue", activebackground="blue", activeforeground="orange")
-        self.trainDataButton.place(x=99, y=680, width=221, height=40)
+        detailsFrame = Frame(canvas, bg="blue", height=400)
+        
 
-        # Photos Button
+        scrollbar.config(command=canvas.yview)
+        scrollbar.pack(side=RIGHT, fill=Y)
 
-        image_size = (220, 220)
-        self.buttonPhotoImage6 = resize_method("images/photos.webp", image_size)
+        
 
-        self.photosButton1 = Button(self.root, image=self.buttonPhotoImage6, cursor="hand2", activebackground="blue")
-        self.photosButton1.place(x=420, y=500, width=220, height=220)
+        studentIdNoLabel = Label(detailsFrame, text="Reg NO:", font=font1, fg="Black", bg="white", width=100)
+        studentIdNoLabel.place(x=100, y=30)
 
-        self.photosButton = Button(self.root, text='Photos', cursor="hand2", font=("Consolas", 13), fg="white",
-                                   bg="darkblue", activebackground="blue", activeforeground="orange")
-        self.photosButton.place(x=419, y=680, width=221, height=40)
+        self.studentIdNoEntry = customtkinter.CTkEntry(detailsFrame, width=180, font=font3, corner_radius=15, bg_color="white", text_color="#000000", height=30)
+        self.studentIdNoEntry.place(x=200, y=30)
 
-        # Developer Details Button
 
-        image_size = (220, 220)
-        self.buttonPhotoImage7 = resize_method("images/developer.jpeg", image_size)
+        
+        
 
-        self.developerDetailButton1 = Button(self.root, image=self.buttonPhotoImage7, cursor="hand2",
-                                             activebackground="blue")
-        self.developerDetailButton1.place(x=740, y=500, width=220, height=220)
+        detailsFrame.place(x=30, y=20, height=400, width=600)
 
-        self.developerDetailButton = Button(self.root, text='Developer', cursor="hand2", font=("Consolas", 13),
-                                            fg="white", bg="darkblue", activebackground="blue",
-                                            activeforeground="orange")
-        self.developerDetailButton.place(x=739, y=680, width=221, height=40)
+        canvas.create_window((0, 0), window=detailsFrame, anchor="nw", width=680)
+        canvas.pack(side="left", fill="both", expand=True)
+        # canvas.place(x=0, y=0, )
 
-        # Exit Button
+        def on_frame_configure(event):
+            canvas.configure(scrollregion=canvas.bbox("all"))
+            
 
-        image_size = (220, 220)
-        self.buttonPhotoImage8 = resize_method("images/exit-sign.webp", image_size)
+        detailsFrame.bind("<Configure>", on_frame_configure)
 
-        self.exitButton1 = Button(self.root, image=self.buttonPhotoImage8, cursor="hand2", activebackground="blue",
-                                  command=lambda: self.exitMethod())
-        self.exitButton1.place(x=1060, y=500, width=220, height=220, )
+        studentClassInformationFrame.place(x=3, y=230, height=295, width=690)
+        # ******************  End of it *********************
 
-        self.exitButton = Button(self.root, text='Exit', cursor="hand2", font=("Consolas", 13), fg="white",
-                                 bg="darkblue", activebackground="blue", activeforeground="orange",
-                                 command=self.exitMethod)
-        self.exitButton.place(x=1059, y=680, width=221, height=40)
+        studentDetailsFrame.place(x=10, y=3, height=555, width=700)
+        studentMainFrame.place(x=10, y=172, width=1480, height=600)
+
+        # ******************  End of the MainFrame *********************
 
     def __init__(self):
+        self.yearDropdown = None
+        self.departmentDropdown = None
+        self.studentPicsFrame = None
         self.timeLabel = None
-        self.currentTime = None
-        self.photoImage = None
-        self.studentDetailButton1 = None
         self.photoImage3 = None
-        self.buttonPhotoImage1 = None
         self.photoImage2 = None
-        self.faceDetectorButton = None
-        self.faceDetectorButton1 = None
-        self.buttonPhotoImage2 = None
-        self.buttonPhotoImage4 = None
-        self.attendanceDetailButton = None
-        self.helpDeskButton1 = None
-        self.studentDetailButton = None
         self.photoImage4 = None
-        self.attendanceDetailButton1 = None
-        self.helpDeskButton = None
-        self.trainDataButton = None
-        self.trainDataButton1 = None
-        self.buttonPhotoImage3 = None
-        self.buttonPhotoImage5 = None
-        self.photosButton1 = None
-        self.buttonPhotoImage6 = None
-        self.photosButton = None
-        self.developerDetailButton1 = None
-        self.buttonPhotoImage7 = None
-        self.developerDetailButton = None
-        self.buttonPhotoImage8 = None
-        self.exitButton1 = None
-        self.exitButton = None
-        self.exitMethod = self.exitMethod
-        self.current_time = self.current_time
+        self.photoImage = None
+        self.window = Tk()
+        self.window.geometry("1530x790+-3+1")
+        self.window.iconbitmap("images/favicon (2).ico")
 
-        self.root = Tk()
-        self.root.wm_overrideredirect(True)
-        self.root.geometry("1530x790+0+0")
-        self.root.iconbitmap("images/favicon (2).ico")
+        self.studentMethod()
 
-        self.mainMethod()
-
-        self.root.mainloop()
+        self.window.mainloop()
 
 
 if __name__ == '__main__':
-    mainApplication = Main()
+    StudentWindow()
