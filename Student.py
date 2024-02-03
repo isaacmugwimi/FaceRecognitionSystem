@@ -51,13 +51,50 @@ class StudentWindow:
         studentMainFrame.place(x=10, y=172, width=1480, height=600)
 
         # Label Frame
-        studentDetailsFrame = LabelFrame(studentMainFrame, text="Student Details", fg="red", relief=RIDGE,
-                                         font=("Consolas", 18), bg="white", borderwidth=6, highlightbackground="yellow",
-                                         highlightthickness=10
+        studentDetailsFrame = LabelFrame(studentMainFrame, text="Student Details", fg="red", relief=GROOVE,
+                                         font=("Arial", 15), bg="white", borderwidth=2,
                                          )
         studentDetailsFrame.place(x=10, y=10, height=540, width=700)
 
+        # Adding images tos the StudentDetailsFrame
+
+        self.studentPicsFrame = Frame(studentDetailsFrame, bg="Blue", )
+        self.studentPicsFrame.place(x=2, y=0, width=690, height=115)
+
+        # ****************** Start of it ****************************
+        def studentPicsMethod():
+            newSize = (170, 120)
+            self.studentImage1 = resize_method("images/1st.jpg", newSize)
+            Label(self.studentPicsFrame, image=self.studentImage1, text='').place(x=1, y=1, width=170, height=120)
+
+            newSize = (170, 120)
+            self.studentImage2 = resize_method("images/5th.jpg", newSize)
+            Label(self.studentPicsFrame, image=self.studentImage2, text='').place(x=171, y=1, width=170, height=120)
+
+
+            newSize = (170, 120)
+            self.studentImage3 = resize_method("images/8th.jpg", newSize)
+            Label(self.studentPicsFrame, image=self.studentImage3, text='').place(x=341, y=1, width=170, height=120)
+
+            
+            newSize = (170, 120)
+            self.studentImage4 = resize_method("images/4th.jpg", newSize)
+            Label(self.studentPicsFrame, image=self.studentImage4, text='').place(x=511, y=1, width=170, height=120)
+
+        studentPicsMethod()  # method which hold the studentImages
+
+        # ********************* End of It *******************************
+
+        
+
+        courseInformationFrame = LabelFrame(studentDetailsFrame, text="Current Course Information", fg="Green",
+                                            relief=RIDGE,
+                                            font=("Arial", 11), bg="white", borderwidth=2
+                                            )
+        courseInformationFrame.place(x=3, y=120, height=150, width=690)
+
     def __init__(self):
+        self.studentPicsFrame = None
         self.timeLabel = None
         self.photoImage3 = None
         self.photoImage2 = None
