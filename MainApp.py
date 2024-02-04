@@ -5,6 +5,8 @@ import time
 
 from PIL import ImageTk, Image
 
+from Student import StudentWindow
+
 
 def resize_method(imagePath, imageSize):
     currentImage = Image.open(imagePath)
@@ -65,11 +67,12 @@ class Main:
         self.buttonPhotoImage1 = resize_method("images/9th.jpg", image_size)
 
         self.studentDetailButton1 = Button(self.root, image=self.buttonPhotoImage1, cursor="hand2",
-                                           activebackground="blue")
+                                           activebackground="blue", command=self.studentDetailsMethod)
         self.studentDetailButton1.place(x=100, y=230, width=220, height=220)
 
         self.studentDetailButton = Button(self.root, text='Student Details', cursor="hand2", font=("Consolas", 13),
-                                          fg="white", bg="darkblue", activebackground="blue", activeforeground="orange")
+                                          fg="white", bg="dark blue", activebackground="blue", activeforeground="orange"
+                                          , command=self.studentDetailsMethod)
         self.studentDetailButton.place(x=99, y=410, width=221, height=40)
 
         # Face Detector Button
@@ -159,11 +162,14 @@ class Main:
         self.exitButton1.place(x=1060, y=500, width=220, height=220, )
 
         self.exitButton = Button(self.root, text='Exit', cursor="hand2", font=("Consolas", 13), fg="white",
-                                 bg="darkblue", activebackground="blue", activeforeground="orange",
+                                 bg="dark blue", activebackground="blue", activeforeground="orange",
                                  command=self.exitMethod)
         self.exitButton.place(x=1059, y=680, width=221, height=40)
 
     def __init__(self):
+        self.app = None
+        self.new_Window = None
+        self.studentDetailsMethod = self.studentDetailsMethod
         self.timeLabel = None
         self.currentTime = None
         self.photoImage = None
@@ -205,6 +211,11 @@ class Main:
         self.mainMethod()
 
         self.root.mainloop()
+
+    # ******************************* button functions *********************
+    def studentDetailsMethod(self):
+        self.new_Window = Toplevel(self.root)
+        self.app = StudentWindow(self.new_Window)
 
 
 if __name__ == '__main__':
