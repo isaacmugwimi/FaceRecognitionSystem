@@ -1,15 +1,25 @@
+import re
+import tkinter
 from datetime import datetime
 from tkinter import *
-from tkinter import ttk
-
+from tkinter import ttk, messagebox
 import customtkinter
 from PIL import ImageTk, Image
+from tkcalendar import DateEntry
+import databaseFiles
 
 
 def resize_method(imagePath, imageSize):
     currentImage = Image.open(imagePath)
     resizedImage = currentImage.resize(imageSize)
     return ImageTk.PhotoImage(resizedImage)
+
+
+def is_valid_email(email):
+    email_regex = (
+        r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+    )
+    return re.match(email_regex, email)
 
 
 font1 = ('consolas', 11,)
@@ -103,16 +113,16 @@ class StudentWindow:
         Label(courseInformationFrame, text="Department:", font=font1, fg="Black", bg="white", ).place(x=5, y=3,
                                                                                                       width=100)
         self.departmentDropdown = ttk.Combobox(courseInformationFrame, width=13, font=font2, state="readonly",
-                                               textvariable=self.var_department)
+                                               textvariable=self.department)
         # self.departmentDropdown.set("Select Department Option")
         self.departmentDropdown["values"] = (
-            "Select Department Option", "Computer", "IT", "Civil", "Mechanical", "Business", "Education")
+            "Select Department", "Computer", "IT", "Civil", "Mechanical", "Business", "Education")
         self.departmentDropdown.current(0)
         self.departmentDropdown.place(x=110, y=7, width=200, height=23)
 
         Label(courseInformationFrame, text="Year:", font=font1, fg="Black", bg="white").place(x=5, y=38, width=100)
         self.yearDropdown = ttk.Combobox(courseInformationFrame, width=13, font=font2, state="readonly",
-                                         textvariable=self.var_year)
+                                         textvariable=self.year)
         # self.yearDropdown.set("Select Year")
         self.yearDropdown["values"] = ("Select Year", "year 1", "year 2", "year 3", "year 4")
         self.yearDropdown.current(0)
@@ -120,7 +130,7 @@ class StudentWindow:
 
         Label(courseInformationFrame, text="Course:", font=font1, fg="Black", bg="white", ).place(x=340, y=3, width=100)
         self.courseDropdown = ttk.Combobox(courseInformationFrame, width=13, font=font2, state="readonly",
-                                           textvariable=self.var_course)
+                                           textvariable=self.course_dropdown)
         # self.courseDropdown.set("Select Course")
         self.courseDropdown["values"] = ("Select Course",
                                          "Computer Science", "Software Engineering", "BIT", "BBIT",
@@ -132,7 +142,7 @@ class StudentWindow:
         Label(courseInformationFrame, text="Semester:", font=font1, fg="Black", bg="white", ).place(x=340, y=38,
                                                                                                     width=100)
         self.semesterDropdown = ttk.Combobox(courseInformationFrame, width=13, font=font2, state="readonly",
-                                             textvariable=self.var_semester)
+                                             textvariable=self.semester)
         # self.semesterDropdown.set("Select Semester")
         self.semesterDropdown["values"] = ("Select Semester", "Semester 1", "Semester 2", "semester 3")
         self.semesterDropdown.current(0)
@@ -157,7 +167,7 @@ class StudentWindow:
 
         self.studentIdNoEntry = customtkinter.CTkEntry(detailsFrame, width=180, font=font3, corner_radius=15,
                                                        bg_color="white", text_color="#000000", height=25,
-                                                       textvariable=self.var_regNo)
+                                                       textvariable=self.studentIdNo)
         self.studentIdNoEntry.grid(row=0, column=1, padx=5, pady=5)
 
         # class Division
@@ -165,7 +175,7 @@ class StudentWindow:
         classDivisionComboboxLabel.grid(row=1, column=0, padx=5, pady=5, sticky=W)
 
         self.classDivisionCombobox = ttk.Combobox(detailsFrame, width=22, font=font2, state="readonly",
-                                                  textvariable=self.var_classDiv)
+                                                  textvariable=self.division)
         self.classDivisionCombobox["values"] = ("Select Class Division", "Division1", "Division2")
         self.classDivisionCombobox.current(0)
         self.classDivisionCombobox.grid(row=1, column=1, pady=5)
@@ -175,7 +185,7 @@ class StudentWindow:
         genderComboboxLabel.grid(row=2, column=0, padx=5, pady=5, sticky=W)
 
         self.genderCombobox = ttk.Combobox(detailsFrame, width=22, font=font2, state="readonly",
-                                           textvariable=self.var_gender)
+                                           textvariable=self.gender)
         self.genderCombobox["values"] = ("Select Gender", "Male", "Female", "Other")
         self.genderCombobox.current(0)
         self.genderCombobox.grid(row=2, column=1, pady=5)
@@ -186,7 +196,7 @@ class StudentWindow:
 
         self.emailEntry = customtkinter.CTkEntry(detailsFrame, width=180, font=font3, corner_radius=15,
                                                  bg_color="white", text_color="#000000", height=25,
-                                                 textvariable=self.var_email)
+                                                 )
         self.emailEntry.grid(row=3, column=1, padx=5, pady=5)
 
         # Address
@@ -195,7 +205,7 @@ class StudentWindow:
 
         self.addressEntry = customtkinter.CTkEntry(detailsFrame, width=180, font=font3, corner_radius=15,
                                                    bg_color="white", text_color="#000000", height=25,
-                                                   textvariable=self.var_address)
+                                                   )
         self.addressEntry.grid(row=4, column=1, padx=5, pady=5)
 
         # Student Name
@@ -204,7 +214,7 @@ class StudentWindow:
 
         self.studentNameEntry = customtkinter.CTkEntry(detailsFrame, width=180, font=font3, corner_radius=15,
                                                        bg_color="white", text_color="#000000", height=25,
-                                                       textvariable=self.var_studentName)
+                                                       textvariable=self.studentName)
         self.studentNameEntry.grid(row=0, column=3, padx=0, pady=5)
 
         # Roll No.
@@ -213,16 +223,22 @@ class StudentWindow:
 
         self.studentRollNoEntry = customtkinter.CTkEntry(detailsFrame, width=180, font=font3, corner_radius=15,
                                                          bg_color="white", text_color="#000000", height=25,
-                                                         textvariable=self.var_rollNo)
+                                                         textvariable=self.rollNo)
         self.studentRollNoEntry.grid(row=1, column=3, padx=0, pady=5)
 
         # D.O.B
         studentDobLabel = Label(detailsFrame, text="D.O.B:", font=font1, fg="Black", bg="white")
         studentDobLabel.grid(row=2, column=2, padx=15, pady=5, sticky=W)
 
-        self.studentDobEntry = customtkinter.CTkEntry(detailsFrame, width=180, font=font3, corner_radius=15,
-                                                      bg_color="white", text_color="#000000", height=25,
-                                                      textvariable=self.var_dob)
+        # self.studentDobEntry = customtkinter.CTkEntry(detailsFrame, width=180, font=font3, corner_radius=15,
+        #                                               bg_color="white", text_color="#000000", height=25,
+        #                                               textvariable=self.dob)
+
+        self.studentDobEntry = DateEntry(detailsFrame, width=25, background='dark blue', height=30,
+                                         foreground='white', borderwidth=2, date_pattern='dd-MM-yyyy',
+                                         showweeknumbers=False, year=2000,
+                                         selectbackground='lightblue', selectforeground='black',
+                                         weekendforeground='red')
         self.studentDobEntry.grid(row=2, column=3, padx=0, pady=5)
 
         # Phone No.
@@ -231,7 +247,7 @@ class StudentWindow:
 
         self.studentPhoneEntry = customtkinter.CTkEntry(detailsFrame, width=180, font=font3, corner_radius=15,
                                                         bg_color="white", text_color="#000000", height=25,
-                                                        textvariable=self.var_phoneNo)
+                                                        textvariable=self.phoneNo)
         self.studentPhoneEntry.grid(row=3, column=3, padx=0, pady=5)
 
         # Radio Buttons
@@ -251,21 +267,21 @@ class StudentWindow:
 
         # save button
         self.saveButton = customtkinter.CTkButton(self.buttonsFrame, text='SAVE',
-                                                  text_color='#FFFFFF',
+                                                  text_color='#FFFFFF', command=self.saveToDatabaseMethod,
                                                   fg_color='#36719F', height=25, corner_radius=25, width=150,
                                                   cursor='hand2', hover_color='#FF4505', font=('arial', 14))
         self.saveButton.grid(row=0, column=0, padx=5, ipadx=5)
 
         # update button
         self.updateButton = customtkinter.CTkButton(self.buttonsFrame, text='UPDATE',
-                                                    text_color='#FFFFFF',
+                                                    text_color='#FFFFFF', command=self.updateMethod,
                                                     fg_color='#36719F', height=25, corner_radius=25, width=150,
                                                     cursor='hand2', hover_color='#FF4505', font=('arial', 14))
         self.updateButton.grid(row=0, column=1, padx=5, ipadx=5)
 
         # deleteButton
         self.deleteButton = customtkinter.CTkButton(self.buttonsFrame, text='DELETE',
-                                                    text_color='#FFFFFF',
+                                                    text_color='#FFFFFF', command=self.deleteMethod,
                                                     fg_color='#36719F', height=25, corner_radius=25, width=150,
                                                     cursor='hand2', hover_color='#FF4505', font=('arial', 14))
         self.deleteButton.grid(row=0, column=2, padx=5, ipadx=5)
@@ -322,7 +338,7 @@ class StudentWindow:
 
         # Search Combo box
         self.courseComboBox = ttk.Combobox(searchStudentDetailsFrame, width=15, font=font2, state="readonly",
-                                           textvariable=self.var_searchCourse)
+                                           )
         # self.courseComboBox.set("Select Option")
         self.courseComboBox["values"] = ("Select Option", "Roll No", "Mobile No", "name")
         self.courseComboBox.current(0)
@@ -331,7 +347,7 @@ class StudentWindow:
         # Search Entry
         self.searchEntry = customtkinter.CTkEntry(searchStudentDetailsFrame, width=150, font=font3, corner_radius=15,
                                                   bg_color="white", text_color="#000000", height=25,
-                                                  textvariable=self.var_searchCourseEntry)
+                                                  )
         self.searchEntry.grid(row=0, column=2, padx=5, pady=5)
 
         # Search Button
@@ -343,7 +359,7 @@ class StudentWindow:
 
         # Show All Button
         self.showAllButton = customtkinter.CTkButton(searchStudentDetailsFrame, text='SHOW ALL',
-                                                     text_color='#FFFFFF',
+                                                     text_color='#FFFFFF', command=self.fetchData,
                                                      fg_color='#36719F', height=25, corner_radius=25, width=50,
                                                      cursor='hand2', hover_color='#FF4505', font=('arial', 12))
         self.showAllButton.grid(row=0, column=4, padx=5, ipadx=5)
@@ -359,8 +375,11 @@ class StudentWindow:
 
         style = ttk.Style(self.window)
         style.theme_use("clam")
-        style.configure("Treeview.Heading", background='Light green', relief='Flat', font=font2)
-        style.configure("Treeview", background='#000', foreground='#FFF', font=font1, fieldbackground='#313837')
+        style.configure("Treeview.Heading", background='Light green', font=font2,
+                        borderwidth=1, relief="solid", bordercolor="green")
+        style.configure("Treeview", background='#000', foreground='#FFF', font=font1, fieldbackground='#313837',
+                        )
+        style.map("Treeview", background=[("selected", '#1A8F2D')])
 
         items = ("department", "courses", "year", "semester", "studentID", "studentName", "classDiv",
                  "rollNo", "gender", "d.o.b", "email", "phoneNo", "address", "photo")
@@ -371,39 +390,51 @@ class StudentWindow:
         yScrollBar.pack(fill=Y, side=RIGHT)
         xScrollBar.config(command=self.table.xview)
         yScrollBar.config(command=self.table.yview)
-        # self.table["column"] = ("department", "courses", "year", "semester", "studentID", "studentName", "classDiv", 
+        # self.table["column"] = ("department", "courses", "year", "semester", "studentID", "studentName", "classDiv",
         #                         "rollNo", "gender", "d.o.b", "email", "phoneNo", "address", "photo")
         self.table["column"] = items
 
-        for i in items:
-            self.table.column(i, width=100)
+        # for i in items:
+        #     self.table.column(i, width=170)
 
-        # self.table.column("#0", width=0, stretch=tk.NO)
-        # self.table.column("Department", anchor=tk.CENTER, width=80)
-        # self.table.column("Course", anchor=tk.CENTER, width=60)
-        # self.table.column("Year", anchor=tk.CENTER, width=60)
-        # self.table.column("Semester", anchor=tk.CENTER, width=60)
-        # self.table.column("Student ID", anchor=tk.CENTER, width=80)
-        # self.table.column("Student Name", anchor=tk.CENTER, width=90)
-        # self.table.column("Class Div", anchor=tk.CENTER, width=70)
-        # self.table.column("Roll No", anchor=tk.CENTER, width=80)
+        for col in (
+                "department", "courses", "year", "semester", "studentID", "studentName", "classDiv", "rollNo", "gender",
+                "d.o.b", "email", "phoneNo", "address", "photo"):
+            self.table.column(col, stretch=NO)
 
-        self.table.heading("department", text="Department")
-        self.table.heading("courses", text="Courses")
-        self.table.heading("year", text="Year")
-        self.table.heading("semester", text="Semester")
-        self.table.heading("studentID", text="Student ID")
-        self.table.heading("studentName", text="Student Name")
-        self.table.heading("classDiv", text="Class Div")
-        self.table.heading("rollNo", text="Roll No")
-        self.table.heading("gender", text="Gender")
-        self.table.heading("d.o.b", text="D.O.B")
-        self.table.heading("email", text="Email")
-        self.table.heading("phoneNo", text="Phone NO")
-        self.table.heading("address", text="address")
-        self.table.heading("photo", text="Photo")
+        self.table.column("#0", width=0, stretch=tkinter.NO)
+        self.table.column("department", anchor=tkinter.W, width=150)
+        self.table.column("courses", anchor=tkinter.W, width=200)
+        self.table.column("year", anchor=tkinter.W, width=150)
+        self.table.column("semester", anchor=tkinter.W, width=150)
+        self.table.column("studentID", anchor=tkinter.W, width=150)
+        self.table.column("studentName", anchor=tkinter.W, width=170)
+        self.table.column("classDiv", anchor=tkinter.W, width=150)
+        self.table.column("rollNo", anchor=tkinter.W, width=100)
+        self.table.column("gender", anchor=tkinter.W, width=100)
+        self.table.column("d.o.b", anchor=tkinter.W, width=150)
+        self.table.column("email", anchor=tkinter.W, width=200)
+        self.table.column("phoneNo", anchor=tkinter.W, width=150)
+        self.table.column("address", anchor=tkinter.W, width=150)
+        self.table.column("photo", anchor=tkinter.W, width=100)
+
+        self.table.heading("department", text="Department", anchor=tkinter.W)
+        self.table.heading("courses", text="Courses", anchor=tkinter.W)
+        self.table.heading("year", text="Year", anchor=tkinter.W)
+        self.table.heading("semester", text="Semester", anchor=tkinter.W)
+        self.table.heading("studentID", text="Student ID", anchor=tkinter.W)
+        self.table.heading("studentName", text="Student Name", anchor=tkinter.W)
+        self.table.heading("classDiv", text="Class Div", anchor=tkinter.W)
+        self.table.heading("rollNo", text="Roll No", anchor=tkinter.W)
+        self.table.heading("gender", text="Gender", anchor=tkinter.W)
+        self.table.heading("d.o.b", text="D.O.B", anchor=tkinter.W)
+        self.table.heading("email", text="Email", anchor=tkinter.W)
+        self.table.heading("phoneNo", text="Phone NO", anchor=tkinter.W)
+        self.table.heading("address", text="Address", anchor=tkinter.W)
+        self.table.heading("photo", text="Photo", anchor=tkinter.W)
         self.table["show"] = "headings"
 
+        self.table.bind("<ButtonRelease>", lambda event: self.displayData(event))
         self.table.pack(fill=BOTH, expand=1)
         tableFrame.place(x=5, y=260, height=250, width=600)
 
@@ -413,7 +444,33 @@ class StudentWindow:
         # studentMainFrame.place(x=10, y=172, width=1480, height=600)
         # ******************  End of the MainFrame *********************
 
+        self.studentIdNo = self.studentIdNoEntry.get()
+        self.email = self.emailEntry.get()
+        self.address = self.addressEntry.get()
+        self.studentName = self.studentNameEntry.get()
+        self.rollNo = self.studentRollNoEntry.get()
+        self.phoneNo = self.studentPhoneEntry.get()
+        self.selectedDate = self.studentDobEntry.get_date()
+
     def __init__(self, mainWindow):
+        self.photo = None
+        self.displayData = self.displayData
+        self.selectedDate = False
+        self.course_dropdown = None
+        self.searchEntry_variable = None
+        self.course = None
+        self.gender = None
+        self.semester = None
+        self.year = None
+        self.department = None
+        self.division = None
+        self.phoneNo = None
+        self.email = None
+        self.address = None
+        self.studentName = None
+        self.rollNo = None
+        self.studentIdNo = None
+        self.saveToDatabaseMethod = self.saveToDatabaseMethod
         self.backMethod = self.backMethod
         self.backButton = None
         self.courseComboBox = None
@@ -451,23 +508,13 @@ class StudentWindow:
         self.photoImage = None
 
         # ********************************** variable Declarations ******************************
-        self.var_department = StringVar()
-        self.var_year = StringVar()
-        self.var_semester = StringVar()
-        self.var_course = StringVar()
-        self.var_regNo = StringVar()
-        self.var_classDiv = StringVar()
-        self.var_gender = StringVar()
-        self.var_email = StringVar()
-        self.var_address = StringVar()
-        self.var_studentName = StringVar()
-        self.var_rollNo = StringVar()
-        self.var_dob = StringVar()
-        self.var_phoneNo = StringVar()
-        self.var_searchCourse = StringVar()
-        self.var_searchCourseEntry = StringVar()
+        self.department = StringVar()
+        self.year = StringVar()
+        self.semester = StringVar()
+        self.course_dropdown = StringVar()
+        self.division = StringVar()
+        self.gender = StringVar()
         self.var_radio1 = StringVar()
-
         # ********************************** end of variable Declarations *********************
 
         self.window = mainWindow
@@ -489,6 +536,140 @@ class StudentWindow:
         self.studentNameEntry.delete(0, END)
         self.studentRollNoEntry.delete(0, END)
         self.studentDobEntry.delete(0, END)
+        self.studentDobEntry.set_date("01/01/2000")
+        self.studentPhoneEntry.delete(0, END)
+        self.searchEntry.delete(0, END)
+
+        self.departmentDropdown.current(0)
+        self.yearDropdown.current(0)
+        self.courseDropdown.current(0)
+        self.semesterDropdown.current(0)
+        self.classDivisionCombobox.current(0)
+        self.genderCombobox.current(0)
+        # self.courseComboBox.current(0)
+        for i in self.table.get_children():
+            self.table.delete(i)
+
+    def backMethod(self):
+        self.window.destroy()
+
+    def saveToDatabaseMethod(self):
+        self.studentIdNo = self.studentIdNoEntry.get()
+        self.email = self.emailEntry.get()
+        self.address = self.addressEntry.get()
+        self.studentName = self.studentNameEntry.get()
+        self.rollNo = self.studentRollNoEntry.get()
+        self.phoneNo = self.studentPhoneEntry.get()
+        self.searchEntry_variable = self.searchEntry.get()
+        self.selectedDate = self.studentDobEntry.get_date()
+
+        # Data validation before insertion to the database
+
+        if (
+                self.departmentDropdown.current() == 0 or
+                self.yearDropdown.current() == 0 or
+                self.semesterDropdown.current() == 0 or
+                self.courseDropdown.current() == 0 or
+                self.studentIdNo == '' or
+                self.classDivisionCombobox.current() == 0 or
+                self.genderCombobox.current() == 0 or
+                self.email == '' or
+                self.address == '' or
+                self.studentName == '' or
+                self.rollNo == '' or
+                self.phoneNo == ''
+        ):
+            messagebox.showerror("Error", "Please fill all the fields")
+            return
+
+        # regNO checking
+        if not self.studentIdNo.isdigit():
+            messagebox.showerror("Error", "Student Registration number must be an integer")
+            return
+
+        # Email checking
+        if not is_valid_email(self.email):
+            messagebox.showerror("Error", "Invalid email format")
+            return
+
+        #         phone number checking
+        if not self.phoneNo.isdigit():
+            messagebox.showerror("Error", "Phone number should be a valid integer")
+            return
+
+        # roll number checking
+        if not self.rollNo.isdigit():
+            messagebox.showerror("Error", "Roll number should be a valid integer")
+            return
+
+        else:
+            try:
+
+                databaseFiles.createTable()
+
+                department = self.department.get()
+                course_dropdown = self.course_dropdown.get()
+                year = self.year.get()
+                semester = self.semester.get()
+                studentIdNo = self.studentIdNo
+                studentName = self.studentName
+                division = self.division.get()
+                rollNo = self.rollNo
+                gender = self.gender.get()
+                selectedDate = self.selectedDate
+                email = self.email
+                phoneNo = self.phoneNo
+                address = self.address
+                var_radio = self.var_radio1.get()
+
+                if not databaseFiles.userExists(studentIdNo):
+                    self.dataInsertion()
+
+                    databaseFiles.databaseInsertion(department, course_dropdown, year, semester, studentIdNo,
+                                                    studentName, division, rollNo, gender, selectedDate, email,
+                                                    phoneNo, address, var_radio
+                                                    )
+
+                    messagebox.showinfo("Success", "Student details added successfully")
+                    self.clearMethod()
+
+                else:
+                    messagebox.showerror("Error", "User already exists")
+
+            except Exception as e:
+                print(e)
+                messagebox.showerror("Error", f"{e}")
+
+    def dataInsertion(self):
+
+        for m in self.table.get_children():
+            self.table.delete(m)
+
+        self.table.insert("", "end", values=(self.departmentDropdown.get(),
+                                             self.courseDropdown.get(),
+                                             self.yearDropdown.get(),
+                                             self.semesterDropdown.get(),
+                                             self.studentIdNoEntry.get(),
+                                             self.studentNameEntry.get(),
+                                             self.classDivisionCombobox.get(),
+                                             self.studentRollNoEntry.get(),
+                                             self.genderCombobox.get(),
+                                             self.selectedDate,
+                                             self.emailEntry.get(),
+                                             self.studentPhoneEntry.get(),
+                                             self.addressEntry.get(),
+                                             self.var_radio1.get()
+                                             ))
+
+    def clearMethod(self):
+        self.studentIdNoEntry.delete(0, END)
+        self.emailEntry.delete(0, END)
+        self.addressEntry.delete(0, END)
+        self.studentNameEntry.delete(0, END)
+        self.studentRollNoEntry.delete(0, END)
+        self.studentDobEntry.delete(0, END)
+        self.studentDobEntry.set_date("01/01/2000")
+
         self.studentPhoneEntry.delete(0, END)
         self.searchEntry.delete(0, END)
 
@@ -500,11 +681,145 @@ class StudentWindow:
         self.genderCombobox.current(0)
         self.courseComboBox.current(0)
 
-        for item in self.table.get_children():
-            self.table.delete(item)
+    def displayData(self, event):
 
-    def backMethod(self):
-        self.window.destroy()
+        selected_item = self.table.focus()
+        if selected_item:
+            row = self.table.item(selected_item)['values']
+            self.clearMethod()
+            self.studentDobEntry.delete(0, END)
+            self.department.set(row[0]),
+            self.course_dropdown.set(row[1]),
+            self.year.set(row[2]),
+            self.semester.set(row[3]),
+            self.studentIdNoEntry.insert(0, row[4]),
+            self.studentNameEntry.insert(0, row[5]),
+            self.division.set(row[6]),
+            self.studentRollNoEntry.insert(0, row[7]),
+            self.gender.set(row[8]),
+            self.studentDobEntry.insert(0, row[9]),
+            self.emailEntry.insert(0, row[10]),
+            self.studentPhoneEntry.insert(0, row[11]),
+            self.addressEntry.insert(0, row[12]),
+            self.var_radio1.set(row[13])
+
+    def fetchData(self):
+        data = databaseFiles.fetchingData()
+        if len(data) != 0:
+            self.table.delete(*self.table.get_children())
+            for i in data:
+                self.table.insert("", END, values=i)
+
+    def updateMethod(self):
+
+        # Extracting values from the entry widgets and other controls
+        department = self.department.get()
+        course_dropdown = self.course_dropdown.get()
+        year = self.year.get()
+        semester = self.semester.get()
+        studentIdNo = self.studentIdNoEntry.get()
+
+        studentName = self.studentNameEntry.get()
+        division = self.division.get()
+        rollNo = self.studentRollNoEntry.get()
+        gender = self.gender.get()
+        selectedDate = self.selectedDate
+        email = self.emailEntry.get()
+        phoneNo = self.studentPhoneEntry.get()
+        address = self.addressEntry.get()
+        var_radio = self.var_radio1.get()
+
+        # Getting the selected item in the table
+        selectedItem = self.table.focus()
+
+        if not selectedItem:
+            messagebox.showerror("Error", "Choose a student to update")
+
+        else:
+            try:
+                self.studentIdNo = self.studentIdNoEntry.get()
+                self.email = self.emailEntry.get()
+                self.address = self.addressEntry.get()
+                self.studentName = self.studentNameEntry.get()
+                self.rollNo = self.studentRollNoEntry.get()
+                self.phoneNo = self.studentPhoneEntry.get()
+                self.searchEntry_variable = self.searchEntry.get()
+                self.selectedDate = self.studentDobEntry.get_date()
+
+                # Data validation before insertion to the database
+
+                if (
+                        self.departmentDropdown.current() == 0 or
+                        self.yearDropdown.current() == 0 or
+                        self.semesterDropdown.current() == 0 or
+                        self.courseDropdown.current() == 0 or
+                        self.studentIdNo == '' or
+                        self.classDivisionCombobox.current() == 0 or
+                        self.genderCombobox.current() == 0 or
+                        self.email == '' or
+                        self.address == '' or
+                        self.studentName == '' or
+                        self.rollNo == '' or
+                        self.phoneNo == ''
+                ):
+                    messagebox.showerror("Error", "Please fill all the fields")
+                    return
+
+                # regNO checking
+                if not self.studentIdNo.isdigit():
+                    messagebox.showerror("Error", "Student Registration number must be an integer")
+                    return
+
+                # Email checking
+                if not is_valid_email(self.email):
+                    messagebox.showerror("Error", "Invalid email format")
+                    return
+
+                #         phone number checking
+                if not self.phoneNo.isdigit():
+                    messagebox.showerror("Error", "Phone number should be a valid integer")
+                    return
+
+                # roll number checking
+                if not self.rollNo.isdigit():
+                    messagebox.showerror("Error", "Roll number should be a valid integer")
+                    return
+
+                else:
+                    # Corrected order of parameters in the function call
+                    databaseFiles.updateDatabaseMethod(department, course_dropdown, year, semester,
+                                                       studentName, division, rollNo, gender, selectedDate, email,
+                                                       phoneNo, address, var_radio, studentIdNo)
+                    # Insert the updated data into the treeview
+                    self.dataInsertion()
+
+                    messagebox.showinfo('Success', 'Data has been updated.')
+                    self.clearMethod()
+            except Exception as e:
+                print(e)
+                messagebox.showerror("Error", f"Error occurred\n {e}")
+
+    def deleteMethod(self):
+        selectedItem = self.table.focus()
+        if not selectedItem:
+            messagebox.showerror("Error", "Please select a record to delete.")
+            return
+        else:
+            response = messagebox.askyesno(
+                "Confirm", "Do you really want to delete the record? \n Note: The Record will be deleted permanently."
+            )
+
+            if response:
+                try:
+                    results = self.table.item(selectedItem, 'values')[4]
+                    databaseFiles.deleteItem(results)
+                    messagebox.showinfo("Success", "Record deleted successfully")
+                    self.resetMethod()
+                    self.fetchData()
+
+                except Exception as e:
+                    print(e)
+                    messagebox.showerror("Error", f"{e}")
 
 
 if __name__ == '__main__':
