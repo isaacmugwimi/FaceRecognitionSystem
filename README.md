@@ -52,6 +52,8 @@ FaceRecognitionSystem/
 ├── train.py            # Dataset trainer script
 └── attendance.csv      # Real-time attendance logs
 
+```
+
 📦 Quick Start
 Clone the repo:
 
