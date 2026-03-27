@@ -51,6 +51,7 @@ FaceRecognitionSystem/
 ├── main.py             # Main GUI application
 ├── train.py            # Dataset trainer script
 └── attendance.csv      # Real-time attendance logs
+
 📦 Quick Start
 Clone the repo:
 
@@ -68,4 +69,3 @@ python main.py
 Isaac Mugwimi Full-Stack Developer & BSc IT Graduate LinkedIn | GitHub
 
 ⭐ If you find this project useful, feel free to star the repository!
-
